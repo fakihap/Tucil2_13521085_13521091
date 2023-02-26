@@ -1,66 +1,59 @@
-// package main
+package main
 
-// import (
-// 	"os"
+import (
+	"os"
+	"io"
 
-// 	"github.com/go-echarts/go-echarts/v2/charts"
-// 	"github.com/go-echarts/go-echarts/v2/opts"
-// )
+	"github.com/go-echarts/go-echarts/v2/charts"
+	"github.com/go-echarts/go-echarts/v2/components"
+	"github.com/go-echarts/go-echarts/v2/opts"
+)
+
+func visualizePoints(points []Point){
+	scatter3d := charts.NewScatter3D()
+	scatter3d.Chart3D.SetGlobalOptions(
+		charts.WithTitleOpts(opts.Title{
+			Title: "Closest Pair Problem : 3D Visualization",
+			Subtitle: "Author : Addin Munawwar Yusuf and Fakih Anugerah Pratama", 
+			Top: "5%",
+			Bottom: "5%",
+		}),
+	)
+
+	scatter3d.AddSeries("scatter3d", genScatter3dData(points))
+	renderToPage(scatter3d)
+}
+
+func renderToPage(chart *charts.Scatter3D) {
+	page := components.NewPage()
+	page.AddCharts(
+		chart,
+	)
+
+	f, err := os.Create("visualization.html")
+	if err != nil {
+		panic(err)
+	}
+	page.Render(io.MultiWriter(f))
+}
 
 
-// func genScatter3dData(points Point[]) []opts.Chart3DData {
-// 	var data []opts.Chart3DData
-// 	for _, point := range points {
-// 		data = append(data, opts.Chart3DData{Value: []interface{}{point.x, point.y, 0}})
-// 	}
-// 	return data
-// }
-
-// func scatter3DBase() *charts.Scatter3D {
-// 	scatter3d := charts.NewScatter3D()
-// 	scatter3d.SetGlobalOptions(
-// 		charts.WithTitleOpts(opts.Title{Title: "basic Scatter3D example"}),
-// 	)
-
-// 	scatter3d.AddSeries("scatter3d", genScatter3dData())
-// 	return scatter3d
-// }
-
-// func scatter3DDataItem() *charts.Scatter3D {
-// 	scatter3d := charts.NewScatter3D()
-// 	scatter3d.SetGlobalOptions(
-// 		charts.WithTitleOpts(opts.Title{Title: "user-defined item style"}),
-// 		charts.WithXAxis3DOpts(opts.XAxis3D{Name: "MY-X-AXIS", Show: true}),
-// 		charts.WithYAxis3DOpts(opts.YAxis3D{Name: "MY-Y-AXIS"}),
-// 		charts.WithZAxis3DOpts(opts.ZAxis3D{Name: "MY-Z-AXIS"}),
-// 	)
-
-// 	scatter3d.AddSeries("scatter3d", []opts.Chart3DData{
-// 		{Name: "point1", Value: []interface{}{10, 10, 10}, ItemStyle: &opts.ItemStyle{Color: "green"}},
-// 		{Name: "point2", Value: []interface{}{15, 15, 15}, ItemStyle: &opts.ItemStyle{Color: "blue"}},
-// 		{Name: "point3", Value: []interface{}{20, 20, 20}, ItemStyle: &opts.ItemStyle{Color: "red"}},
-// 	})
-
-// 	return scatter3d
-// }
-
-// type Scatter3dExamples struct{}
-
-// func (Scatter3dExamples) Examples() {
-// 	page := components.NewPage()
-// 	page.AddCharts(
-// 		scatter3DBase(),
-// 		scatter3DDataItem(),
-// 	)
-
-// 	f, err := os.Create("scatter3d.html")
-// 	if err != nil {
-// 		panic(err)
-// 	}
-// 	page.Render(io.MultiWriter(f))
-// }
+func genScatter3dData(points []Point) []opts.Chart3DData {
+	var data []opts.Chart3DData
+	for i, point := range points {
+		data = append(data, opts.Chart3DData{
+			Name: "Point " + string(i),
+			Value: []interface{}{point.x, point.y, point.z},
+			ItemStyle : &opts.ItemStyle{	
+				Color: "#1ecbe1",
+				Opacity: 1,
+			},
+		})
+	}
+	return data
+}
 
 // func main() {
-// 	s := Scatter3dExamples{}
-// 	s.Examples()
+// 	points := []Point{ *NewPoint(1, 2, 3), *NewPoint(4, 5, 6), *NewPoint(7, 8, 9), *NewPoint(10, 11, 12)}
+// 	visualizePoints(points)
 // }
