@@ -1,4 +1,4 @@
-package CPairSolver
+package main
 
 type Point struct {
 	x int
@@ -28,6 +28,6 @@ func (p * Point) setX(newX int) {
 	p.x = newX;
 }
 
-func (p * Point) setY(newY int) int {
+func (p * Point) setY(newY int) {
 	p.y = newY;
 }
