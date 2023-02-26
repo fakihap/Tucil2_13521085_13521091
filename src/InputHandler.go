@@ -28,9 +28,3 @@ func printPoints (points []Point) {
 		fmt.Printf("Point %d : (%d, %d, %d)\n", i, point.getX(), point.getY(), point.getZ())
 	}
 }
-
-func main() {
-	points := readPoints()
-	
-	// printPoints(points)
-}	

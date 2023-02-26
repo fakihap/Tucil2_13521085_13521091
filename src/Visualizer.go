@@ -1,12 +1,11 @@
 package main
 
 import (
-	"os"
-	"io"
+	"net/http"
 
 	"github.com/go-echarts/go-echarts/v2/charts"
-	"github.com/go-echarts/go-echarts/v2/components"
 	"github.com/go-echarts/go-echarts/v2/opts"
+	"github.com/icza/gox/osx"
 )
 
 func visualizePoints(points []Point){
@@ -21,22 +20,12 @@ func visualizePoints(points []Point){
 	)
 
 	scatter3d.AddSeries("scatter3d", genScatter3dData(points))
-	renderToPage(scatter3d)
+	http.HandleFunc("/", func(w http.ResponseWriter, _ *http.Request) {
+		scatter3d.Render(w)
+	})
+	osx.OpenDefault("http://localhost:8080/")
+	http.ListenAndServe(":8080", nil)
 }
-
-func renderToPage(chart *charts.Scatter3D) {
-	page := components.NewPage()
-	page.AddCharts(
-		chart,
-	)
-
-	f, err := os.Create("visualization.html")
-	if err != nil {
-		panic(err)
-	}
-	page.Render(io.MultiWriter(f))
-}
-
 
 func genScatter3dData(points []Point) []opts.Chart3DData {
 	var data []opts.Chart3DData

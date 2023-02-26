@@ -1,6 +1,11 @@
 package main
 
+var (
+	num_of_points int = 0
+)
+
 type Point struct {
+	ID int
 	x int
 	y int
 	z int
@@ -12,6 +17,9 @@ func NewPoint(_x int, _y int, _z int) *Point {
 	p.x = _x
 	p.y = _y
 	p.z = _z
+
+	num_of_points++
+	p.ID = num_of_points
 
 	return p
 }
