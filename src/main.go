@@ -19,14 +19,14 @@ func main() {
 	fmt.Println("after")
 	s.Print()
 
-	//et := src.NewExecTimer("Process")
+	et := NewExecTimer("Process")
 
-	//et.Start()
+	et.Start()
 
 	pa, pb, dist := GetClosestByForce(*p1, *p2, *p3)
 
 	fmt.Println(pa, pb, dist)
 
-	//et.Finish() // on progress
-	//et.Tell()
+	et.Finish() // on progress
+	et.Tell()
 }
