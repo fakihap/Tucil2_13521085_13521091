@@ -1,13 +1,13 @@
-package main
+package CPairSolver
 
 var (
 	num_of_points int = 0
 )
 
 type Point struct {
-	ID int
+	ID        int
 	dimension int
-	val []int
+	val       []int
 }
 
 // Constructor

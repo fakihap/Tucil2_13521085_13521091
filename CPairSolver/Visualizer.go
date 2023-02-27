@@ -1,4 +1,4 @@
-package main
+package CPairSolver
 
 import (
 	"net/http"
@@ -8,14 +8,14 @@ import (
 	"github.com/icza/gox/osx"
 )
 
-func visualizePoints(points []Point){
+func visualizePoints(points []Point) {
 	scatter3d := charts.NewScatter3D()
 	scatter3d.Chart3D.SetGlobalOptions(
 		charts.WithTitleOpts(opts.Title{
-			Title: "Closest Pair Problem : 3D Visualization",
-			Subtitle: "Author : Addin Munawwar Yusuf and Fakih Anugerah Pratama", 
-			Top: "5%",
-			Bottom: "5%",
+			Title:    "Closest Pair Problem : 3D Visualization",
+			Subtitle: "Author : Addin Munawwar Yusuf and Fakih Anugerah Pratama",
+			Top:      "5%",
+			Bottom:   "5%",
 		}),
 	)
 
@@ -31,10 +31,10 @@ func genScatter3dData(points []Point) []opts.Chart3DData {
 	var data []opts.Chart3DData
 	for i, point := range points {
 		data = append(data, opts.Chart3DData{
-			Name: "Point " + string(i),
+			Name:  "Point " + string(i),
 			Value: []interface{}{point.x, point.y, point.z},
-			ItemStyle : &opts.ItemStyle{	
-				Color: "#1ecbe1",
+			ItemStyle: &opts.ItemStyle{
+				Color:   "#1ecbe1",
 				Opacity: 1,
 			},
 		})

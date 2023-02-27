@@ -1,4 +1,4 @@
-package main
+package CPairSolver
 
 import (
 	"fmt"
@@ -7,7 +7,6 @@ import (
 func readPoints() []Point {
 	var points []Point
 	var n int
-
 
 	fmt.Printf("\nEnter number of points : ")
 	fmt.Scan(&n)
@@ -23,7 +22,7 @@ func readPoints() []Point {
 	return points
 }
 
-func printPoints (points []Point) {
+func printPoints(points []Point) {
 	for i, point := range points {
 		fmt.Printf("Point %d : (%d, %d, %d)\n", i, point.getX(), point.getY(), point.getZ())
 	}
