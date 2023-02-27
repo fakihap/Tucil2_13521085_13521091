@@ -32,7 +32,7 @@ func genScatter3dData(points []Point) []opts.Chart3DData {
 	for i, point := range points {
 		data = append(data, opts.Chart3DData{
 			Name:  "Point " + string(i),
-			Value: []interface{}{point.x, point.y, point.z},
+			Value: []interface{}{point.GetAxisValue(0), point.GetAxisValue(1), point.GetAxisValue(2)},
 			ItemStyle: &opts.ItemStyle{
 				Color:   "#1ecbe1",
 				Opacity: 1,

@@ -21,3 +21,7 @@ func NewPoint(dimension int, val []int) *Point {
 
 	return p
 }
+
+func (p Point) GetAxisValue(axis int) int {
+	return p.val[axis]
+}
