@@ -5,19 +5,23 @@ var (
 )
 
 type Point struct {
-	ID int
+	ID        int
 	dimension int
-	val []int
+	val       []int
 }
 
 // Constructor
-func NewPoint(dimension int, val []int) *Point {
+func NewPoint(val ...int) *Point {
 	p := new(Point)
-	p.dimension = dimension
+	p.dimension = len(val)
 	p.val = val
 
 	num_of_points++
 	p.ID = num_of_points
 
 	return p
+}
+
+func (p Point) GetAxisValue(axis int) int {
+	return p.val[axis]
 }
