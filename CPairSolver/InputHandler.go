@@ -16,7 +16,7 @@ func readPoints() []Point {
 		var x, y, z int
 		fmt.Printf("Point %d : ", i+1)
 		fmt.Scan(&x, &y, &z)
-		points = append(points, *NewPoint(3, []int{x, y, z}))
+		points = append(points, *NewPoint(x, y, z))
 	}
 
 	return points

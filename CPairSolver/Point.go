@@ -11,9 +11,9 @@ type Point struct {
 }
 
 // Constructor
-func NewPoint(dimension int, val []int) *Point {
+func NewPoint(val ...int) *Point {
 	p := new(Point)
-	p.dimension = dimension
+	p.dimension = len(val)
 	p.val = val
 
 	num_of_points++
