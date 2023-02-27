@@ -84,7 +84,7 @@ func GetClosestByForce(points ...Point) (Point, Point, float64) {
 	}
 
 	for id1, p1 := range points {
-		for id2, p2 := range points[id1:] {
+		for id2, p2 := range points[id1+1:] {
 			if p1.ID == p2.ID {
 				continue
 			}

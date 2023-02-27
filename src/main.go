@@ -5,9 +5,9 @@ import (
 )
 
 func main() {
-	p1 := NewPoint(1, 2, 3)
+	p1 := NewRandomPoint(3)
 	p2 := NewPoint(2, 0, 0)
-	p3 := NewPoint(-1, 999, 999)
+	p3 := NewRandomPoint(3)
 
 	s := NewSolver(*p1, *p2, *p3)
 
