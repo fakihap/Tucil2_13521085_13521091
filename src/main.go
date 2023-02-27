@@ -5,11 +5,20 @@ import (
 )
 
 func main() {
-	p1 := NewRandomPoint(3)
-	p2 := NewPoint(2, 0, 0)
-	p3 := NewRandomPoint(3)
+	et := NewExecTimer("Bruteforce")
+	et2 := NewExecTimer("Divide and Conquer")
 
-	s := NewSolver(*p1, *p2, *p3)
+	p1 := NewRandomPoint(4)
+	p2 := NewPoint(2, 0, 0, 9)
+	p3 := NewRandomPoint(4)
+	p4 := NewRandomPoint(4)
+	p5 := NewRandomPoint(4)
+	p6 := NewRandomPoint(4)
+	p7 := NewPoint(3, 99, 1, 4)
+	p8 := NewPoint(-12, -90, 2, 0)
+
+	// by force
+	s := NewSolver(*p1, *p2, *p3, *p4, *p5, *p6, *p7, *p8)
 
 	fmt.Println("before")
 	s.Print()
@@ -19,14 +28,32 @@ func main() {
 	fmt.Println("after")
 	s.Print()
 
-	et := NewExecTimer("Process")
-
 	et.Start()
 
-	pa, pb, dist := GetClosestByForce(*p1, *p2, *p3)
+	s.SolveByForce()
 
-	fmt.Println(pa, pb, dist)
+	if s.solutionFound {
+		fmt.Println(s.solutionPoints, s.solutionDist)
+	}
 
-	et.Finish() // on progress
+	et.Finish()
 	et.Tell()
+
+	// with divide and conquer
+
+	s2 := NewSolver(*p1, *p2, *p3, *p4, *p5, *p6, *p7, *p8)
+
+	s2.Sort(0)
+
+	et2.Start()
+
+	s2.Solve()
+
+	if s2.solutionFound {
+		fmt.Println(s2.solutionPoints, s2.solutionDist)
+	}
+
+	et2.Finish()
+	et2.Tell()
+
 }

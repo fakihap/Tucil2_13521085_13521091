@@ -8,6 +8,10 @@ import (
 type Solver struct {
 	points    []Point
 	dimension int
+
+	solutionFound  bool
+	solutionPoints [2]Point
+	solutionDist   float64
 }
 
 func NewSolver(points ...Point) *Solver {
@@ -15,6 +19,7 @@ func NewSolver(points ...Point) *Solver {
 
 	s.points = points
 	s.dimension = len(points)
+	s.solutionFound = false
 
 	return s
 }
@@ -39,7 +44,7 @@ func getPartition(slice []Point, a, b, axis int) int {
 	return i + 1
 }
 
-func (s Solver) quickSort(a, b, axis int) {
+func (s *Solver) quickSort(a, b, axis int) {
 	if a < b {
 		p := getPartition(s.points, a, b, axis)
 
@@ -48,12 +53,12 @@ func (s Solver) quickSort(a, b, axis int) {
 	}
 }
 
-func (s Solver) Sort(axis int) {
+func (s *Solver) Sort(axis int) {
 	s.quickSort(0, len(s.points)-1, axis)
 }
 
 // Print prints points saved on solver
-func (s Solver) Print() {
+func (s *Solver) Print() {
 	for _, point := range s.points {
 		for _, val := range point.val {
 			fmt.Print(val, " ")
@@ -69,13 +74,13 @@ func getDelta(p1, p2 Point) float64 {
 	var d float64
 
 	for i := 0; i < p1.dimension; i++ {
-		d += math.Pow(float64(p2.GetAxisValue(i)-p1.GetAxisValue(i)), 2)
+		d += math.Pow(float64(p2.GetAxisValue(i))-float64(p1.GetAxisValue(i)), 2)
 	}
 
 	return math.Sqrt(d)
 }
 
-func GetClosestByForce(points ...Point) (Point, Point, float64) {
+func getClosestByForce(points ...Point) (Point, Point, float64) {
 	delta := getDelta(points[0], points[1])
 	idA, idB := 0, 1
 
@@ -93,10 +98,75 @@ func GetClosestByForce(points ...Point) (Point, Point, float64) {
 
 			if delta > dist {
 				delta = dist
-				idA, idB = id1, id2
+				idA, idB = id1, id2+id1+1
 			}
 		}
 	}
 
 	return points[idA], points[idB], delta
+}
+
+func getClosestPair(P []Point, n int) (Point, Point, float64) {
+	if n <= 3 {
+		return getClosestByForce(P...)
+	}
+	mid := n / 2
+
+	var a, b, a1, a2, b1, b2 Point
+	var d, dl, dr float64
+
+	a1, b1, dl = getClosestPair(P[:mid], mid) // note that slices arent inclusive on both sides -> [lo:hi)
+	a2, b2, dr = getClosestPair(P[mid:], n-mid)
+
+	if dl < dr {
+		d = dl
+		a, b = a1, b1
+	} else {
+		d = dr
+		a, b = a2, b2
+	}
+
+	// get distance from region1 and region2 bruteforce
+	// TODO : optimize this part
+	// TODO : remove explicit float64 casting
+	midX := float64(P[mid-1].GetAxisValue(0)+P[mid].GetAxisValue(0)) / 2
+
+	for i, _ := range P[:mid] {
+		for j, _ := range P[mid:] {
+			if math.Abs(float64(P[i].GetAxisValue(0))-midX) > d || math.Abs(float64(P[j+mid].GetAxisValue(0))-midX) > d {
+				continue
+			}
+
+			tempDist := getDelta(P[i], P[j+mid])
+
+			if d > tempDist {
+				d = tempDist
+				a, b = P[i], P[j+mid]
+			}
+		}
+	}
+
+	return a, b, d
+}
+
+func (s *Solver) Solve() {
+	s.solutionPoints[0], s.solutionPoints[1], s.solutionDist = getClosestPair(s.points, len(s.points))
+	s.solutionFound = true
+}
+
+func (s *Solver) SolveByForce() {
+	s.solutionPoints = [2]Point(s.points[:2])
+	s.solutionDist = getDelta(s.points[0], s.points[1])
+	s.solutionFound = true
+
+	for i, _ := range s.points {
+		for j, _ := range s.points[i+1:] {
+			tempDist := getDelta(s.points[i], s.points[j+i+1])
+
+			if s.solutionDist > tempDist {
+				s.solutionDist = tempDist
+				s.solutionPoints = [2]Point{s.points[i], s.points[j+i+1]}
+			}
+		}
+	}
 }
