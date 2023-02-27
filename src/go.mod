@@ -1,10 +1,6 @@
-module Tucil2
+module main
 
 go 1.20
-
-replace Tucil2/CPairSolver => /CPairSolver
-
-require Tucil2/CPairSolver v0.0.0
 
 require (
 	github.com/go-echarts/go-echarts/v2 v2.2.5 // indirect

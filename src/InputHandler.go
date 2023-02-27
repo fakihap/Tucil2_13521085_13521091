@@ -1,4 +1,4 @@
-package CPairSolver
+package main
 
 import (
 	"fmt"

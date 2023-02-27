@@ -1,4 +1,4 @@
-package CPairSolver
+package main
 
 var (
 	num_of_points int = 0
