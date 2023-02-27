@@ -6,13 +6,7 @@ import (
 )
 
 func main() {
-	// p := NewPoint(2, 3)
-
-	// fmt.Println(p.GetX())
-	// fmt.Println(p.GetY())
 	p1 := CPairSolver.NewPoint(1, 2, 3)
-
-	//fmt.Println(p.GetAxisValue(0))
 	p2 := CPairSolver.NewPoint(2, 0, 0)
 	p3 := CPairSolver.NewPoint(-1, 999, 999)
 
@@ -25,4 +19,15 @@ func main() {
 
 	fmt.Println("after")
 	s.Print()
+
+	//et := CPairSolver.NewExecTimer("Process")
+
+	//et.Start()
+
+	pa, pb, dist := CPairSolver.GetClosestByForce(*p1, *p2, *p3)
+
+	fmt.Println(pa, pb, dist)
+
+	//et.Finish() // on progress
+	//et.Tell()
 }
