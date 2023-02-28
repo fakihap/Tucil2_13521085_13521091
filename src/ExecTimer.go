@@ -23,7 +23,6 @@ func (et *ExecTimer) Start() {
 	et.startTime = time.Now()
 }
 
-// TODO : fix inconsistent elapsed time calculation
 func (et *ExecTimer) Finish() {
 	et.elapsedTime = time.Since(et.startTime)
 }

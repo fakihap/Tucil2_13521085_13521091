@@ -133,7 +133,6 @@ func getClosestByForce(points ...Point) (Point, Point, float64) {
 	return points[idA], points[idB], delta
 }
 
-// NOTE : there is a chance for random points generation to generate points with same position but different IDs
 func getClosestPair(P []Point, n int) (Point, Point, float64) {
 	if n <= 3 {
 		return getClosestByForce(P...)
@@ -154,14 +153,12 @@ func getClosestPair(P []Point, n int) (Point, Point, float64) {
 		a, b = a2, b2
 	}
 
-	// get distance from region1 and region2 bruteforce
 	// TODO : optimize this part
-	// TODO : remove explicit float64 casting
-	midX := float64(P[mid-1].GetAxisValue(0)+P[mid].GetAxisValue(0)) / 2
+	midX := (P[mid-1].GetAxisValue(0) + P[mid].GetAxisValue(0)) / 2
 
 	for i, _ := range P[:mid] {
 		for j, _ := range P[mid:] {
-			if math.Abs(float64(P[i].GetAxisValue(0))-midX) > d || math.Abs(float64(P[j+mid].GetAxisValue(0))-midX) > d {
+			if math.Abs(P[i].GetAxisValue(0)-midX) > d || math.Abs(P[j+mid].GetAxisValue(0)-midX) > d {
 				continue
 			}
 
