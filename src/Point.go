@@ -33,7 +33,7 @@ func NewRandomPoint(dimension int, lowerBound float64, upperBound float64) *Poin
 	p.val = make([]float64, dimension)
 
 	for i, _ := range p.val {
-		p.val[i] = rand.Float64()*(upperBound-lowerBound) + lowerBound // [-100, 100]
+		p.val[i] = rand.Float64()*(upperBound-lowerBound) + lowerBound // [lowerBound, upperBound]
 	}
 
 	num_of_points++
