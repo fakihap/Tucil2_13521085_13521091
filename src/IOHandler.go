@@ -5,18 +5,18 @@ import (
 	"strconv"
 )
 
-type InputHandler struct{}
+type IOHandler struct{}
 
-func NewInputHandler() *InputHandler {
-	return new(InputHandler)
+func NewIOHandler() *IOHandler {
+	return new(IOHandler)
 }
 
-func (i InputHandler) readUserConfig() (int, int, float64, float64) {
+func (i IOHandler) readUserConfig() (int, int, float64, float64) {
 	var n, dimension int
 	var lowerBound, upperBound float64
 
 	for {
-		n = i.GetInt("\nEnter number of points : ")
+		n = i.GetInt("Enter number of points : ")
 
 		if n >= 2 {
 			break
@@ -51,7 +51,7 @@ func (i InputHandler) readUserConfig() (int, int, float64, float64) {
 	return n, dimension, lowerBound, upperBound
 }
 
-func (i InputHandler) askToVisualize() bool {
+func (i IOHandler) askToVisualize() bool {
 	var visualize string
 
 	fmt.Printf("\nVisualize your result? (y/n) : ")
@@ -63,17 +63,18 @@ func (i InputHandler) askToVisualize() bool {
 	}
 
 	if visualize == "y" {
+		fmt.Println("\nVisualizing... (Ctrl-C to exit))")
 		return true
 	} else {
 		return false
 	}
 }
 
-func (i InputHandler) PrintLine(msg string) {
+func (i IOHandler) PrintLine(msg string) {
 	fmt.Println(msg)
 }
 
-func (i InputHandler) GetInt(msg string) int {
+func (i IOHandler) GetInt(msg string) int {
 	var temp string
 	var res int64
 	var err error
@@ -93,7 +94,7 @@ func (i InputHandler) GetInt(msg string) int {
 	return int(res)
 }
 
-func (i InputHandler) GetFloat64(msg string) float64 {
+func (i IOHandler) GetFloat64(msg string) float64 {
 	var temp string
 	var res float64
 	var err error

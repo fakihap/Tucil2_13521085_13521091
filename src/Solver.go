@@ -261,7 +261,6 @@ func (s *Solver) Describe() {
 		return
 	}
 
-	fmt.Println()
 	fmt.Println("[Closest Pair]")
 	fmt.Println("Dimension:", s.dimension)
 	fmt.Println("Point 1")

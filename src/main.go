@@ -2,6 +2,10 @@ package main
 
 import (
 	"github.com/shirou/gopsutil/v3/cpu"
+	"github.com/shirou/gopsutil/v3/mem"
+	"github.com/shirou/gopsutil/v3/host"
+	"github.com/shirou/gopsutil/v3/disk"
+	"strconv"
 )
 
 func main() {
@@ -10,16 +14,27 @@ func main() {
 	divideAndConquerTimer := NewExecTimer("Divide and Conquer")
 
 	// get user inputs
-	InputHandler := NewInputHandler()
-	n, d, lb, ub := InputHandler.readUserConfig()
+	IOHandler := NewIOHandler()
+	IOHandler.PrintLine("\nUSER CONFIGURATION\n-----------------------")
+	n, d, lb, ub := IOHandler.readUserConfig()
 
 	// construct solver
 	solver := NewSolver()
 	solver.GeneratePoints(n, d, lb, ub)
 
 	// tell specifications
+	IOHandler.PrintLine("COMPUTER SPECIFICATIONS\n-----------------------")
 	val, _ := cpu.Info()
-	InputHandler.PrintLine("CPU Used: " + val[0].ModelName)
+	IOHandler.PrintLine("CPU: " + val[0].ModelName)
+	// get host
+	host, _ := host.Info()
+	IOHandler.PrintLine("Host: " + host.Hostname)
+	// get memory
+	v, _ := mem.VirtualMemory()
+	IOHandler.PrintLine("Memory: " + strconv.FormatUint(v.Total/1024/1024, 10) + " MB")
+	// get disk
+	disk, _ := disk.Usage("/")
+	IOHandler.PrintLine("Disk: " + strconv.FormatUint(disk.Total/1024/1024, 10) + " MB\n")
 
 	// sort points by x-axis
 	sortTimer.Start()
@@ -30,6 +45,7 @@ func main() {
 	sortTimer.Tell()
 
 	// with bruteforce
+	IOHandler.PrintLine("\nWITH BRUTEFORCE\n-----------------------")
 	bruteforceTimer.Start()
 
 	solver.SolveByForce()
@@ -40,6 +56,7 @@ func main() {
 	bruteforceTimer.Tell()
 
 	// with divide and conquer
+	IOHandler.PrintLine("\nWITH DIVIDE AND CONQUER\n-----------------------")
 	divideAndConquerTimer.Start()
 
 	solver.Solve()
@@ -51,15 +68,15 @@ func main() {
 
 	// visualize if 3 dimensions
 	if d == 3 {
-		if InputHandler.askToVisualize() {
+		if IOHandler.askToVisualize() {
 			visualizer := NewVisualizer(solver.points, solver.solutionPoints)
 			visualizer.visualize()
 		}
 	}
 
 	if d != 3 {
-		InputHandler.PrintLine("\nUse 3 dimension input for full experience with the visualizer:D")
+		IOHandler.PrintLine("\nUse 3 dimension input for full experience with the visualizer:D")
 	}
 
-	InputHandler.PrintLine("\nThank you for using this program.")
+	IOHandler.PrintLine("\nThank you for using this program.")
 }
