@@ -5,19 +5,13 @@ func main() {
 	bruteforceTimer := NewExecTimer("Bruteforce")
 	divideAndConquerTimer := NewExecTimer("Divide and Conquer")
 
-	// p1 := NewRandomPoint(4)
-	// p2 := NewPoint(2, 0, 0, 9)
-	// p3 := NewRandomPoint(4)
-	// p4 := NewRandomPoint(4)
-	// p5 := NewRandomPoint(4)
-	// p6 := NewRandomPoint(4)
-	// p7 := NewPoint(3, 99, 1, 4)
-	// p8 := NewPoint(-12, -90, 2, 0)
+	InputHandler := NewInputHandler()
+	n, d, lb, ub := InputHandler.readUserConfig()
 
 	// by force
 	// solver := NewSolver(*p1, *p2, *p3, *p4, *p5, *p6, *p7, *p8)
 	solver := NewSolver()
-	solver.GeneratePoints(10000, 10)
+	solver.GeneratePoints(n, d, lb, ub)
 
 	sortTimer.Start()
 
@@ -56,5 +50,12 @@ func main() {
 
 	divideAndConquerTimer.Finish()
 	divideAndConquerTimer.Tell()
-
+	
+	// visualize
+	if InputHandler.askToVisualize() {
+		visualizer := NewVisualizer(solver.points, solver.solutionPoints)
+		visualizer.visualize()
+	} else {
+		InputHandler.PrintLine("\nThank you for using this program.")
+	}
 }

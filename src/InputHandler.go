@@ -4,26 +4,49 @@ import (
 	"fmt"
 )
 
-func readPoints() []Point {
-	var points []Point
-	var n int
+type InputHandler struct {}
+
+func NewInputHandler() *InputHandler {
+	return new(InputHandler)
+}
+
+func (i InputHandler) readUserConfig() (int, int, int, int) {
+	var n, dimension int
+	var lowerBound, upperBound int
 
 	fmt.Printf("\nEnter number of points : ")
 	fmt.Scan(&n)
 
-	fmt.Printf("\nFor each point, write each coordinates seperated by a space\nExample : 1 2 3\n\n")
-	for i := 0; i < n; i++ {
-		var x, y, z int
-		fmt.Printf("Point %d : ", i+1)
-		fmt.Scan(&x, &y, &z)
-		points = append(points, *NewPoint(x, y, z))
-	}
+	fmt.Printf("Enter dimension : ")
+	fmt.Scan(&dimension)
 
-	return points
+	fmt.Printf("Enter lower bound : ")
+	fmt.Scan(&lowerBound)
+
+	fmt.Printf("Enter upper bound : ")
+	fmt.Scan(&upperBound)
+
+	return n, dimension, lowerBound, upperBound
 }
 
-func printPoints(points []Point) {
-	for i, point := range points {
-		fmt.Printf("Point %d : (%d, %d, %d)\n", i, point.GetAxisValue(0), point.GetAxisValue(1), point.GetAxisValue(2))
+func (i InputHandler) askToVisualize() bool {
+	var visualize string
+
+	fmt.Printf("\nVisualize your result? (y/n) : ")
+	fmt.Scan(&visualize)
+
+	for visualize != "y" && visualize != "n" {
+		fmt.Printf("\nInvalid input. Visualize? (y/n) : ")
+		fmt.Scan(&visualize)
 	}
+
+	if visualize == "y" {
+		return true
+	} else {
+		return false
+	}
+}
+
+func (i InputHandler) PrintLine(msg string) {
+	fmt.Println(msg)
 }

@@ -35,11 +35,11 @@ func NewSolver(points ...Point) *Solver {
 	return s
 }
 
-func (s *Solver) GeneratePoints(nPoints, nDimension int) {
+func (s *Solver) GeneratePoints(nPoints, nDimension int, lowerBound, upperBound int) {
 	var tempPoints []Point
 
 	for i := 0; i < nPoints; i++ {
-		tempPoints = append(tempPoints, *NewRandomPoint(nDimension))
+		tempPoints = append(tempPoints, *NewRandomPoint(nDimension, lowerBound, upperBound))
 	}
 
 	s.dimension = tempPoints[0].dimension
@@ -233,4 +233,8 @@ func (s *Solver) Describe() {
 	fmt.Println("Number of Operations:", euclidOpsCount)
 	fmt.Println()
 
+}
+
+func (s *Solver) getSolutionPoints() [2]Point {
+	return s.solutionPoints
 }

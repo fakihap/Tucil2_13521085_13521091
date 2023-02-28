@@ -8,7 +8,20 @@ import (
 	"github.com/icza/gox/osx"
 )
 
-func visualizePoints(points []Point) {
+type Visualizer struct{
+	points []Point
+	solutionPoints [2]Point
+}
+
+func NewVisualizer(points []Point, solution [2]Point) *Visualizer {
+	v := new(Visualizer)
+	v.points = points
+	v.solutionPoints = solution
+
+	return v
+}
+
+func (v Visualizer) visualize() {
 	scatter3d := charts.NewScatter3D()
 	scatter3d.Chart3D.SetGlobalOptions(
 		charts.WithTitleOpts(opts.Title{
@@ -19,7 +32,7 @@ func visualizePoints(points []Point) {
 		}),
 	)
 
-	scatter3d.AddSeries("scatter3d", genScatter3dData(points))
+	scatter3d.AddSeries("scatter3d", v.genScatter3dData(v.points, v.solutionPoints))
 	http.HandleFunc("/", func(w http.ResponseWriter, _ *http.Request) {
 		scatter3d.Render(w)
 	})
@@ -27,22 +40,30 @@ func visualizePoints(points []Point) {
 	http.ListenAndServe(":8080", nil)
 }
 
-func genScatter3dData(points []Point) []opts.Chart3DData {
+func (v Visualizer) genScatter3dData(points []Point, solutionPoints [2]Point) []opts.Chart3DData {
 	var data []opts.Chart3DData
 	for i, point := range points {
+		if point.Equals(solutionPoints[0]) || point.Equals(solutionPoints[1]) {}
 		data = append(data, opts.Chart3DData{
 			Name:  "Point " + string(i),
 			Value: []interface{}{point.GetAxisValue(0), point.GetAxisValue(1), point.GetAxisValue(2)},
 			ItemStyle: &opts.ItemStyle{
-				Color:   "#1ecbe1",
+				Color:   "#1ECBE1",
 				Opacity: 1,
 			},
 		})
 	}
+
+	for i, point := range solutionPoints {
+		data = append(data, opts.Chart3DData{
+			Name:  "Solution Point " + string(i),
+			Value: []interface{}{point.GetAxisValue(0), point.GetAxisValue(1), point.GetAxisValue(2)},
+			ItemStyle: &opts.ItemStyle{
+				Color:   "#E1341E",
+				Opacity: 1,
+			},
+		})
+	}
+
 	return data
 }
-
-// func main() {
-// 	points := []Point{ *NewPoint(1, 2, 3), *NewPoint(4, 5, 6), *NewPoint(7, 8, 9), *NewPoint(10, 11, 12)}
-// 	visualizePoints(points)
-// }
