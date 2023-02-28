@@ -24,6 +24,12 @@ func NewVisualizer(points []Point, solution [2]Point) *Visualizer {
 func (v Visualizer) visualize() {
 	scatter3d := charts.NewScatter3D()
 	scatter3d.Chart3D.SetGlobalOptions(
+		charts.WithInitializationOpts(opts.Initialization{
+			PageTitle: "Closest Pair Visualization",
+			Width: "90vw",
+			Height: "90vh",
+			BackgroundColor: "#F2F4F7",
+		}),
 		charts.WithTitleOpts(opts.Title{
 			Title:    "Closest Pair Problem : 3D Visualization",
 			Subtitle: "Author : Addin Munawwar Yusuf and Fakih Anugerah Pratama",
