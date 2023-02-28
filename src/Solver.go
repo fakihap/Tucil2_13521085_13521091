@@ -5,6 +5,8 @@ import (
 	"math"
 )
 
+var euclidOpsCount int
+
 type Solver struct {
 	points    []Point
 	dimension int
@@ -91,10 +93,12 @@ func (s *Solver) Print() {
 	}
 }
 
-func getDelta(p1, p2 Point) float64 {
+func getEuclideanDistance(p1, p2 Point) float64 {
 	// assuming both points have the same order of dimension
 
 	var d float64
+
+	euclidOpsCount++
 
 	for i := 0; i < p1.dimension; i++ {
 		d += math.Pow(float64(p2.GetAxisValue(i))-float64(p1.GetAxisValue(i)), 2)
@@ -104,7 +108,7 @@ func getDelta(p1, p2 Point) float64 {
 }
 
 func getClosestByForce(points ...Point) (Point, Point, float64) {
-	delta := getDelta(points[0], points[1])
+	delta := getEuclideanDistance(points[0], points[1])
 	idA, idB := 0, 1
 
 	if len(points) > 3 {
@@ -117,7 +121,7 @@ func getClosestByForce(points ...Point) (Point, Point, float64) {
 				continue
 			}
 
-			dist := getDelta(p1, p2)
+			dist := getEuclideanDistance(p1, p2)
 
 			if delta > dist {
 				delta = dist
@@ -161,7 +165,7 @@ func getClosestPair(P []Point, n int) (Point, Point, float64) {
 				continue
 			}
 
-			tempDist := getDelta(P[i], P[j+mid])
+			tempDist := getEuclideanDistance(P[i], P[j+mid])
 
 			if d > tempDist {
 				d = tempDist
@@ -179,6 +183,8 @@ func (s *Solver) Solve() {
 		return
 	}
 
+	euclidOpsCount = 0
+
 	s.solutionPoints[0], s.solutionPoints[1], s.solutionDist = getClosestPair(s.points, len(s.points))
 	s.solutionFound = true
 }
@@ -189,13 +195,15 @@ func (s *Solver) SolveByForce() {
 		return
 	}
 
+	euclidOpsCount = 0
+
 	s.solutionPoints = [2]Point{s.points[0], s.points[1]}
-	s.solutionDist = getDelta(s.points[0], s.points[1])
+	s.solutionDist = getEuclideanDistance(s.points[0], s.points[1])
 	s.solutionFound = true
 
 	for i, _ := range s.points {
 		for j, _ := range s.points[i+1:] {
-			tempDist := getDelta(s.points[i], s.points[j+i+1])
+			tempDist := getEuclideanDistance(s.points[i], s.points[j+i+1])
 
 			if s.solutionDist > tempDist {
 				s.solutionDist = tempDist
@@ -222,6 +230,7 @@ func (s *Solver) Describe() {
 	fmt.Println("Position:", s.solutionPoints[1].val)
 	fmt.Println()
 	fmt.Println("Delta:", s.solutionDist)
+	fmt.Println("Number of Operations:", euclidOpsCount)
 	fmt.Println()
 
 }
