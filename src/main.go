@@ -57,5 +57,9 @@ func main() {
 		}
 	}
 
+	if d != 3 {
+		InputHandler.PrintLine("\nUse 3 dimension input for full experience with the visualizer:D")
+	}
+
 	InputHandler.PrintLine("\nThank you for using this program.")
 }

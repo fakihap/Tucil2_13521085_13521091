@@ -106,6 +106,19 @@ func getEuclideanDistance(p1, p2 Point) float64 {
 
 	return math.Sqrt(d)
 }
+func getEuclideanDistanceAxis(p1, p2 Point, axis int) float64 {
+	// assuming both points have the same order of dimension
+
+	var d float64
+
+	euclidOpsCount++
+
+	for i := axis; i < p1.dimension; i++ {
+		d += math.Pow(float64(p2.GetAxisValue(i))-float64(p1.GetAxisValue(i)), 2)
+	}
+
+	return math.Sqrt(d)
+}
 
 func getClosestByForce(points ...Point) (Point, Point, float64) {
 	delta := getEuclideanDistance(points[0], points[1])
@@ -133,6 +146,31 @@ func getClosestByForce(points ...Point) (Point, Point, float64) {
 	return points[idA], points[idB], delta
 }
 
+func (p Point) getPointsInRange(points []Point, d float64, curr_dimension int) []Point {
+	var pointsInRange []Point
+	if curr_dimension == 1 {
+		for _, other := range points {
+			if p.ID == other.ID { // dont compare with itself
+				continue
+			}
+			axis := p.dimension - curr_dimension
+			if math.Abs(p.GetAxisValue(axis) - other.GetAxisValue(axis)) <= d {
+				pointsInRange = append(pointsInRange, other)
+			}
+		}
+	} else {
+		candidates := p.getPointsInRange(points, d, curr_dimension - 1)
+		axis := p.dimension - curr_dimension
+		for _, candidate := range candidates {
+			if getEuclideanDistanceAxis(p, candidate, axis) <= d {
+				pointsInRange = append(pointsInRange, candidate)
+			}
+		}
+	}
+
+	return pointsInRange
+}
+
 func getClosestPair(P []Point, n int) (Point, Point, float64) {
 	if n <= 3 {
 		return getClosestByForce(P...)
@@ -156,17 +194,24 @@ func getClosestPair(P []Point, n int) (Point, Point, float64) {
 	// TODO : optimize this part
 	midX := (P[mid-1].GetAxisValue(0) + P[mid].GetAxisValue(0)) / 2
 
-	for i, _ := range P[:mid] {
-		for j, _ := range P[mid:] {
-			if math.Abs(P[i].GetAxisValue(0)-midX) > d || math.Abs(P[j+mid].GetAxisValue(0)-midX) > d {
-				continue
+	var strip_l, strip_r []Point
+	for _, point := range P {
+		if math.Abs(point.GetAxisValue(0) - midX) < d {
+			if point.GetAxisValue(0) < midX {
+				strip_l = append(strip_l, point)
+			} else {
+				strip_r = append(strip_r, point)
 			}
+		}
+	}
 
-			tempDist := getEuclideanDistance(P[i], P[j+mid])
-
-			if d > tempDist {
-				d = tempDist
-				a, b = P[i], P[j+mid]
+	for _, point := range strip_l {
+		candidates := point.getPointsInRange(strip_r, d, point.dimension)
+		for _, candidate := range candidates {
+			dist := getEuclideanDistance(point, candidate)
+			if dist < d {
+				d = dist
+				a, b = point, candidate
 			}
 		}
 	}
