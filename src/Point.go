@@ -31,7 +31,9 @@ func NewRandomPoint(dimension int) *Point {
 	p.val = make([]int, dimension)
 
 	for i, _ := range p.val {
-		p.val[i] = rand.Intn(201) - 100 // [-100, 100]
+		// TODO :
+		// there is still chance for random generated points to be having same position
+		p.val[i] = rand.Intn(2001) - 1000 // [-100, 100]
 	}
 
 	num_of_points++

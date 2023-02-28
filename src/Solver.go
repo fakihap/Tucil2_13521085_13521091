@@ -9,6 +9,8 @@ type Solver struct {
 	points    []Point
 	dimension int
 
+	isInitialized bool
+
 	solutionFound  bool
 	solutionPoints [2]Point
 	solutionDist   float64
@@ -19,8 +21,10 @@ func NewSolver(points ...Point) *Solver {
 
 	if len(points) == 0 {
 		s.dimension = 0
+		s.isInitialized = false
 	} else {
 		s.dimension = points[0].dimension
+		s.isInitialized = true
 	}
 
 	s.points = points
@@ -36,8 +40,10 @@ func (s *Solver) GeneratePoints(nPoints, nDimension int) {
 		tempPoints = append(tempPoints, *NewRandomPoint(nDimension))
 	}
 
-	s.points = tempPoints
+	s.dimension = tempPoints[0].dimension
+	s.isInitialized = true
 
+	s.points = tempPoints
 	s.solutionFound = false
 }
 
@@ -168,11 +174,21 @@ func getClosestPair(P []Point, n int) (Point, Point, float64) {
 }
 
 func (s *Solver) Solve() {
+	if !s.isInitialized {
+		fmt.Println("Solver has not been initialized!")
+		return
+	}
+
 	s.solutionPoints[0], s.solutionPoints[1], s.solutionDist = getClosestPair(s.points, len(s.points))
 	s.solutionFound = true
 }
 
 func (s *Solver) SolveByForce() {
+	if !s.isInitialized {
+		fmt.Println("Solver has not been initialized!")
+		return
+	}
+
 	s.solutionPoints = [2]Point{s.points[0], s.points[1]}
 	s.solutionDist = getDelta(s.points[0], s.points[1])
 	s.solutionFound = true
@@ -187,4 +203,25 @@ func (s *Solver) SolveByForce() {
 			}
 		}
 	}
+}
+
+func (s *Solver) Describe() {
+	if !s.solutionFound {
+		fmt.Println("This solver hasn't found any solution")
+		return
+	}
+
+	fmt.Println()
+	fmt.Println("[Closest Pair]")
+	fmt.Println("Dimension:", s.dimension)
+	fmt.Println("Point 1")
+	fmt.Println("ID:", s.solutionPoints[0].ID)
+	fmt.Println("Position:", s.solutionPoints[0].val)
+	fmt.Println("Point 2")
+	fmt.Println("ID:", s.solutionPoints[1].ID)
+	fmt.Println("Position:", s.solutionPoints[1].val)
+	fmt.Println()
+	fmt.Println("Delta:", s.solutionDist)
+	fmt.Println()
+
 }
