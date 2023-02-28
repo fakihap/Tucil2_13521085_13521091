@@ -1,5 +1,9 @@
 package main
 
+import (
+	"github.com/shirou/gopsutil/v3/cpu"
+)
+
 func main() {
 	sortTimer := NewExecTimer("QuickSort")
 	bruteforceTimer := NewExecTimer("Bruteforce")
@@ -12,6 +16,10 @@ func main() {
 	// construct solver
 	solver := NewSolver()
 	solver.GeneratePoints(n, d, lb, ub)
+
+	// tell specifications
+	val, _ := cpu.Info()
+	InputHandler.PrintLine("CPU Used: " + val[0].ModelName)
 
 	// sort points by x-axis
 	sortTimer.Start()
