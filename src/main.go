@@ -38,11 +38,14 @@ func main() {
 	divideAndConquerTimer.Finish()
 	divideAndConquerTimer.Tell()
 
-	// visualize
-	if InputHandler.askToVisualize() {
-		visualizer := NewVisualizer(solver.points, solver.solutionPoints)
-		visualizer.visualize()
-	} else {
-		InputHandler.PrintLine("\nThank you for using this program.")
+	// visualize if 3 dimensions
+	if (d == 3) {
+		if InputHandler.askToVisualize() {
+			visualizer := NewVisualizer(solver.points, solver.solutionPoints)
+			visualizer.visualize()
+		} else {
+			InputHandler.PrintLine("\nThank you for using this program.")
+		}
 	}
+
 }
