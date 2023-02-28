@@ -17,11 +17,28 @@ type Solver struct {
 func NewSolver(points ...Point) *Solver {
 	s := new(Solver)
 
+	if len(points) == 0 {
+		s.dimension = 0
+	} else {
+		s.dimension = points[0].dimension
+	}
+
 	s.points = points
-	s.dimension = points[0].dimension
 	s.solutionFound = false
 
 	return s
+}
+
+func (s *Solver) GeneratePoints(nPoints, nDimension int) {
+	var tempPoints []Point
+
+	for i := 0; i < nPoints; i++ {
+		tempPoints = append(tempPoints, *NewRandomPoint(nDimension))
+	}
+
+	s.points = tempPoints
+
+	s.solutionFound = false
 }
 
 // sort utility
@@ -106,6 +123,7 @@ func getClosestByForce(points ...Point) (Point, Point, float64) {
 	return points[idA], points[idB], delta
 }
 
+// NOTE : there is a chance for random points generation to generate points with same position but different IDs
 func getClosestPair(P []Point, n int) (Point, Point, float64) {
 	if n <= 3 {
 		return getClosestByForce(P...)
