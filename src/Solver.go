@@ -18,7 +18,7 @@ func NewSolver(points ...Point) *Solver {
 	s := new(Solver)
 
 	s.points = points
-	s.dimension = len(points)
+	s.dimension = points[0].dimension
 	s.solutionFound = false
 
 	return s
@@ -155,7 +155,7 @@ func (s *Solver) Solve() {
 }
 
 func (s *Solver) SolveByForce() {
-	s.solutionPoints = [2]Point(s.points[:2])
+	s.solutionPoints = [2]Point{s.points[0], s.points[1]}
 	s.solutionDist = getDelta(s.points[0], s.points[1])
 	s.solutionFound = true
 
