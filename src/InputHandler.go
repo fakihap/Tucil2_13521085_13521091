@@ -4,15 +4,15 @@ import (
 	"fmt"
 )
 
-type InputHandler struct {}
+type InputHandler struct{}
 
 func NewInputHandler() *InputHandler {
 	return new(InputHandler)
 }
 
-func (i InputHandler) readUserConfig() (int, int, int, int) {
+func (i InputHandler) readUserConfig() (int, int, float64, float64) {
 	var n, dimension int
-	var lowerBound, upperBound int
+	var lowerBound, upperBound float64
 
 	fmt.Printf("\nEnter number of points : ")
 	fmt.Scan(&n)

@@ -2,7 +2,6 @@ package main
 
 import (
 	"math/rand"
-	"time"
 )
 
 var (
@@ -12,11 +11,11 @@ var (
 type Point struct {
 	ID        int
 	dimension int
-	val       []int
+	val       []float64
 }
 
 // Constructor
-func NewPoint(val ...int) *Point {
+func NewPoint(val ...float64) *Point {
 	p := new(Point)
 	p.dimension = len(val)
 	p.val = val
@@ -27,16 +26,14 @@ func NewPoint(val ...int) *Point {
 	return p
 }
 
-func NewRandomPoint(dimension int, lowerBound int, upperBound int) *Point {
+func NewRandomPoint(dimension int, lowerBound float64, upperBound float64) *Point {
 	p := new(Point)
 	p.dimension = dimension
 
-	p.val = make([]int, dimension)
+	p.val = make([]float64, dimension)
 
 	for i, _ := range p.val {
-		// TODO :
-		// there is still chance for random generated points to be having same position
-		p.val[i] = rand.Intn(upperBound - lowerBound + 1) + lowerBound // [-100, 100]
+		p.val[i] = rand.Float64()*(upperBound-lowerBound) + lowerBound // [-100, 100]
 	}
 
 	num_of_points++
@@ -45,7 +42,7 @@ func NewRandomPoint(dimension int, lowerBound int, upperBound int) *Point {
 	return p
 }
 
-func (p Point) GetAxisValue(axis int) int {
+func (p Point) GetAxisValue(axis int) float64 {
 	return p.val[axis]
 }
 

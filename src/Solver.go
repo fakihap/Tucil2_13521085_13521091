@@ -35,7 +35,7 @@ func NewSolver(points ...Point) *Solver {
 	return s
 }
 
-func (s *Solver) GeneratePoints(nPoints, nDimension int, lowerBound, upperBound int) {
+func (s *Solver) GeneratePoints(nPoints, nDimension int, lowerBound, upperBound float64) {
 	var tempPoints []Point
 
 	for i := 0; i < nPoints; i++ {
