@@ -1,9 +1,5 @@
 package main
 
-import (
-	"fmt"
-)
-
 func main() {
 	sortTimer := NewExecTimer("QuickSort")
 	bruteforceTimer := NewExecTimer("Bruteforce")
@@ -21,7 +17,7 @@ func main() {
 	// by force
 	// solver := NewSolver(*p1, *p2, *p3, *p4, *p5, *p6, *p7, *p8)
 	solver := NewSolver()
-	solver.GeneratePoints(10000, 6)
+	solver.GeneratePoints(10000, 10)
 
 	sortTimer.Start()
 
@@ -40,9 +36,7 @@ func main() {
 
 	solver.SolveByForce()
 
-	if solver.solutionFound {
-		fmt.Println(solver.solutionPoints, solver.solutionDist)
-	}
+	solver.Describe()
 
 	bruteforceTimer.Finish()
 	bruteforceTimer.Tell()
@@ -58,9 +52,7 @@ func main() {
 
 	solver.Solve()
 
-	if solver.solutionFound {
-		fmt.Println(solver.solutionPoints, solver.solutionDist)
-	}
+	solver.Describe()
 
 	divideAndConquerTimer.Finish()
 	divideAndConquerTimer.Tell()
