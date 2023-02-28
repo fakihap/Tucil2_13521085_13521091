@@ -28,8 +28,6 @@ func NewPoint(val ...int) *Point {
 }
 
 func NewRandomPoint(dimension int, lowerBound int, upperBound int) *Point {
-	rand.Seed(time.Now().UnixNano())
-
 	p := new(Point)
 	p.dimension = dimension
 
